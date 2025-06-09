@@ -4,9 +4,6 @@
  * @license MIT
  */
 
-/* eslint-disable arrow-parens */
-/* eslint-disable camelcase */
-/* eslint-disable-next-line spaced-comment */
 /// <reference types="tree-sitter-cli/dsl" />
 // @ts-check
 
@@ -236,7 +233,7 @@ module.exports = grammar({
  *
  * @param {string} name
  *
- * @return {ChoiceRule}
+ * @returns {ChoiceRule}
  */
 function tagName(name) {
   return choice(`@${name}`, `\\${name}`);
@@ -247,8 +244,7 @@ function tagName(name) {
  *
  * @param {Rule} rule
  *
- * @return {SeqRule}
- *
+ * @returns {SeqRule}
  */
 function commaSep1(rule) {
   return seq(rule, repeat(seq(',', rule)));

@@ -1,38 +1,41 @@
 // swift-tools-version:5.3
+
+import Foundation
 import PackageDescription
 
+var sources = ["src/parser.c"]
+if FileManager.default.fileExists(atPath: "src/scanner.c") {
+    sources.append("src/scanner.c")
+}
+
 let package = Package(
-    name: "TreeSitterObjc",
-    platforms: [.macOS(.v10_13), .iOS(.v11)],
+    name: "TreeSitterDoxygen",
     products: [
-        .library(name: "TreeSitterObjc", targets: ["TreeSitterObjc"]),
+        .library(name: "TreeSitterDoxygen", targets: ["TreeSitterDoxygen"]),
     ],
-    dependencies: [],
+    dependencies: [
+        .package(name: "SwiftTreeSitter", url: "https://github.com/tree-sitter/swift-tree-sitter", from: "0.9.0"),
+    ],
     targets: [
-        .target(name: "TreeSitterObjc",
-                path: ".",
-                exclude: [
-                    "binding.gyp",
-                    "bindings",
-                    "Cargo.toml",
-                    "test",
-                    "examples",
-                    "grammar.js",
-                    "LICENSE",
-                    "package.json",
-                    "README.md",
-                    "script",
-                    "src/grammar.json",
-                    "src/node-types.json",
-                ],
-                sources: [
-                    "src/parser.c",
-                    "src/scanner.c",
-                ],
-                resources: [
-                    .copy("queries")
-                ],
-                publicHeadersPath: "bindings/swift",
-                cSettings: [.headerSearchPath("src")])
-    ]
+        .target(
+            name: "TreeSitterDoxygen",
+            dependencies: [],
+            path: ".",
+            sources: sources,
+            resources: [
+                .copy("queries")
+            ],
+            publicHeadersPath: "bindings/swift",
+            cSettings: [.headerSearchPath("src")]
+        ),
+        .testTarget(
+            name: "TreeSitterDoxygenTests",
+            dependencies: [
+                "SwiftTreeSitter",
+                "TreeSitterDoxygen",
+            ],
+            path: "bindings/swift/TreeSitterDoxygenTests"
+        )
+    ],
+    cLanguageStandard: .c11
 )
