@@ -1,5 +1,4 @@
 #include <ctype.h>
-#include <stdio.h>
 #include <wctype.h>
 
 #include "tree_sitter/parser.h"
@@ -40,11 +39,7 @@ void tree_sitter_doxygen_external_scanner_deserialize(void *payload, const char 
         scanner->codeblock_delimiter_length = (uint32_t)buffer[0];
         scanner->codeblock_start_column = (uint32_t)buffer[1];
     } else if (length != 0 && length != 2) {
-        fprintf(stderr,
-                "tree-sitter-doxygen: Invalid buffer length %d! This should "
-                "never happen\n",
-                length);
-        abort();
+        return;
     }
 }
 
